@@ -1,0 +1,90 @@
+<html>
+<head>
+  <title>Page de connection</title>
+  <link rel="stylesheet" href="Login.css">
+  <link href='https://fonts.googleapis.com/css?family=Titillium+Web:400,300,600' rel='stylesheet' type='text/css'>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script type="text/javascript" src="login.js"></script>
+</head>
+
+<body>
+  <div class="form">
+
+    <ul class="tab-group">
+      <li class="tab active"><a href="#signup">S'inscrire</a></li>
+      <li class="tab"><a href="#login">Se connecter</a></li>
+    </ul>
+
+    <div class="tab-content">
+      <div id="signup">
+        <h1>S'inscrire gratuitement</h1>
+
+        <form action="/" method="post">
+
+          <div class="top-row">
+            <div class="field-wrap">
+              <label>
+                Prénom<span class="req">*</span>
+              </label>
+              <input type="text" required autocomplete="off" />
+            </div>
+
+            <div class="field-wrap">
+              <label>
+                Nom<span class="req">*</span>
+              </label>
+              <input type="text"required autocomplete="off"/>
+            </div>
+          </div>
+
+          <div class="field-wrap">
+            <label>
+              Email<span class="req">*</span>
+            </label>
+            <input type="email"required autocomplete="off"/>
+          </div>
+
+          <div class="field-wrap">
+            <label>
+              Mot de passe<span class="req">*</span>
+            </label>
+            <input type="password"required autocomplete="off"/>
+          </div>
+
+          <button type="submit" class="button button-block"/>Let's clean</button>
+
+        </form>
+
+      </div>
+
+      <div id="login">
+        <h1>Bienvenue !</h1>
+
+        <form action="/" method="post">
+
+          <div class="field-wrap">
+            <label>
+              Email<span class="req">*</span>
+            </label>
+            <input type="email"required autocomplete="off"/>
+          </div>
+
+          <div class="field-wrap">
+            <label>
+              Mot de passe<span class="req">*</span>
+            </label>
+            <input type="password"required autocomplete="off"/>
+          </div>
+
+          <p class="forgot"><a href="#">Mot de passe oublié?</a></p>
+
+          <button class="button button-block"/>Connexion</button>
+
+        </form>
+
+      </div>
+
+    </div><!-- tab-content -->
+
+  </div> <!-- /form -->
+</body>
