@@ -1,117 +1,258 @@
+
 <!doctype html>
-<html lang="fr">
-<head>
-<title>HTML5 : Web Sockets</title>
-<meta charset="utf-8">
-<link rel="stylesheet" href="styles.css" type="text/css">
-</head>
-<body>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
 
-<div class="wrap">
+    <title>WOT</title>
 
-  <form>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="./css/style.css">
+  </head>
+  <body onload="init()">
+    <header>
+  <div class="collapse bg-dark" id="navbarHeader">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-8 col-md-7 py-4">
+          <h4 class="text-white">About</h4>
+          <p class="text-muted">Blab bla bla bla bla</p>
+        </div>
+        <div class="col-sm-4 offset-md-1 py-4">
+          <h4 class="text-white">Contact</h4>
 
-    <p id="readyState">readyState : <span id="rs">&nbsp;</span></p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="navbar navbar-dark bg-dark shadow-sm">
+    <div class="container d-flex justify-content-between">
+      <a href="#" class="navbar-brand d-flex align-items-center">
+          <strong>WOT · Aide notre planète</strong>
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </div>
+  </div>
+</header>
 
-    <p><strong>Journal</strong></p>
-    <div name="log" id="log"></div>
-  
-    <p>
-      <label for="texte">Envoyer</label>
-      <input type="text" name="texte" id="texte">
-      <input type="submit" value="OK" id="valid">
+<main role="main">
+
+
+
+  <div class="album py-5 bg-light" id="main">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-10"
+          <form class="form-inline ">
+            <input class="form-control" type="search" placeholder="Rechercher" aria-label="Search">
+          </form>
+        </div>
+        <div class="col-md-2">
+          <button type="button" name="button"  class="btn btn-primary" onclick="ajoutAction()">Proposer Action </button>
+        </diV>
+      </div>
+      <br/>
+      <br/>
+      <br/>
+      <div class="row">
+        <div class="col-md-4 ">
+          <div class="card mb-4 shadow-sm art">
+            <h1>
+              Plage Gruisan
+            </h1
+            <p>
+              Bla bla bla bla bla bla bla bla
+            </p>
+            <br/>
+            <p> Lieu : </p>
+            <br/>
+            <p> Météo requise : Soleil </p>
+            <br/>
+            <p>
+              Météo Prévisinnelle
+            </p>
+            <br/>
+            <p> Auteur : Baptiste Salvador </p>
+            <button type="button" name="button" class="btn btn-light">Rejoindre</button>
+            </div>
+          </div>
+
+        <div class="col-md-4">
+          <div class="card mb-4 shadow-sm art">
+            <h1>
+              Plage Mortbillan
+            </h1
+            <p>
+              Bla bla bla bla bla bla bla bla
+            </p>
+            <br/>
+            <p> Lieu : </p>
+            <br/>
+            <p> Météo requise : Peut-importe </p>
+            <br/>
+            <p>
+              Météo Prévisinnelle
+            </p>
+            <br/>
+            <p> Auteur : Baptiste Salvador </p>
+            <button type="button" name="button" class="btn btn-light">Rejoindre</button>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card mb-4 shadow-sm art">
+            <h1>
+              Cathédrale Albi
+            </h1
+            <p>
+              Bla bla bla bla bla bla bla bla
+            </p>
+            <br/>
+            <p> Lieu : </p>
+            <br/>
+            <p> Météo requise : Peut-importe </p>
+            <br/>
+            <p>
+              Météo Prévisinnelle
+            </p>
+            <br/>
+            <p> Auteur : Baptiste Salvador </p>
+            <button type="button" name="button" class="btn btn-light">Rejoindre</button>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+  <div class="album py-5 bg-light" id="addAction">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-10">
+          <form>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label for="inputEmail4">Email</label>
+                <input type="email" class="form-control" id="inputEmail4" placeholder="Email">
+              </div>
+              <div class="form-group col-md-6">
+                <label for="inputPassword4">Password</label>
+                <input type="password" class="form-control" id="inputPassword4" placeholder="Password">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="inputAddress">Address</label>
+              <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
+            </div>
+            <div class="form-group">
+              <label for="inputAddress2">Address 2</label>
+              <input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor">
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label for="inputCity">City</label>
+                <input type="text" class="form-control" id="inputCity">
+              </div>
+              <div class="form-group col-md-4">
+                <label for="inputState">State</label>
+                <select id="inputState" class="form-control">
+                  <option selected>Choose...</option>
+                  <option>...</option>
+                </select>
+              </div>
+              <div class="form-group col-md-2">
+                <label for="inputZip">Zip</label>
+                <input type="text" class="form-control" id="inputZip">
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="gridCheck">
+                <label class="form-check-label" for="gridCheck">
+                  Check me out
+                </label>
+              </div>
+            </div>
+            <button onclick="retourMain()" class="btn btn-secondary">retour</button>
+            <button type="submit" class="btn btn-primary">Sign in</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer class="text-muted">
+  <div class="container">
+    <div id="log"></div>
+    <input id="msg" type="textbox" onkeypress="onkey(event)"/>
+    <button onclick="send()">Send</button>
+    <button onclick="quit()">Quit</button>
+    <div>Commands: hello, hi, name, age, date, time, thanks, bye</div>
+    <p class="float-right">
+      <a href="#">Retour en haut</a>
     </p>
-  
-    <p><strong>Commandes</strong></p>
-    <ul>
-      <li><kbd>hello</kbd> : saluer</li>
-      <li><kbd>date</kbd> : demander la date</li>
-      <li><kbd>bye</kbd> ou <kbd>ciao</kbd> : quitter</li>
-    </ul>
-  
-  </form>
-
-</div>
-
-<script>
-
-var ws = null;
-
-//  Création d'un nouveau socket
-// (Pour Mozilla < 11 avec version préfixée)
-if('MozWebSocket' in window) {
-
-  ws = new MozWebSocket("ws://127.0.0.1:1337");
-
-} else if('WebSocket' in window) {
-
-  ws = new WebSocket("ws://127.0.0.1:1337");
-
-}
-
-if(typeof ws !=='undefined') {
-
-  // Indication de l'état
-  var rs = document.getElementById('rs');
-
-  // Lors de l'ouverture de connexion
-  ws.onopen = function() {
-    log("Socket ouvert");
-    rs.innerHTML = this.readyState;
-  };
-  
-  // Lors de la réception d'un message
-  ws.onmessage = function(e) {
-    // Ajout au journal du contenu du message
-    log("< "+e.data);
-    rs.innerHTML = this.readyState;
-  };
-
-  // Lors d'une erreur de connexion
-  ws.onerror = function(e) {  
-    log("Erreur de connexion");
-    rs.innerHTML = this.readyState;
-  };
-
-  // Lors de la fermeture de connexion
-  ws.onclose = function(e) {  
-    if(e.wasClean) {
-      log("Socket fermé proprement");
-    } else {
-      log("Socket fermé");
-      if(e.reason) log(e.reason);
-    }
-    rs.innerHTML = this.readyState;
-  };
-
-  // Evénement submit du formulaire
-  document.getElementsByTagName('form')[0].onsubmit = function(e) {
-    var texte = document.getElementById('texte');
-    
-    // Envoi de la chaîne texte
-    ws.send(texte.value);
-    log("> "+texte.value);
-    
-    // Mise à zéro du champ et focus
-    texte.focus();
-    texte.value = '';
-    
-    // Empêche de valider le formulaire
-    e.preventDefault();
-  };
-  
-} else {
-
-  alert("Ce navigateur ne supporte pas Web Sockets");
-
-}
-
-// Fonction d’ajout au journal
-function log(txt) {
-  document.getElementById('log').innerHTML += txt + "<br>\n";
-}
-
-</script>
-
+    <p>Kévin Nguye | Baptiste Salvador | Ghislain Vidal</p>
+  </div>
+</footer>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" integrity="sha384-xrRywqdh3PHs8keKZN+8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o" crossorigin="anonymous"></script>
 </body>
 </html>
+
+<script>
+var socket;
+
+function init(){
+
+  var host = "ws://127.0.0.1:1337";
+  try{
+    socket = new WebSocket(host);
+    log('WebSocket - status '+socket.readyState);
+    socket.onopen    = function(msg){ log("Welcome - status "+this.readyState); };
+    socket.onmessage = function(msg){ log("Received: "+msg.data); };
+    socket.onclose   = function(msg){ log("Disconnected - status "+this.readyState); };
+  }
+  catch(ex){ log(ex); }
+  $("msg").focus();
+}
+
+function send(){
+  var txt,msg;
+  txt = $("msg");
+  msg = txt.value;
+  if(!msg){ alert("Message can not be empty"); return; }
+  txt.value="";
+  txt.focus();
+  try{ socket.send(msg); log('Sent: '+msg); } catch(ex){ log(ex); }
+}
+function ajoutAction() {
+  var user, Nom;
+  user = "test";
+  Nom= user;
+  try{socket.send("addAction"); log('Sent: ajout action au nom de '+ Nom);
+
+  $("main").style.display = 'none';
+  $("addAction").style.display = 'inherit';
+  } catch(ex){ log(ex); }
+}
+function retourMain() {
+  $("addAction").style.display = 'none';
+  $("main").style.display = 'inherit';
+}
+
+function quit(){
+  log("Goodbye!");
+  socket.close();
+  socket=null;
+}
+
+// Utilities
+function $(id){ return document.getElementById(id); }
+function log(msg){ $("log").innerHTML+="<br>"+msg; }
+function onkey(event){ if(event.keyCode==13){ send(); } }
+</script>
