@@ -135,44 +135,33 @@
           <form>
             <div class="form-row">
               <div class="form-group col-md-6">
-                <label for="inputEmail4">Email</label>
-                <input type="email" class="form-control" id="inputEmail4" placeholder="Email">
-              </div>
-              <div class="form-group col-md-6">
-                <label for="inputPassword4">Password</label>
-                <input type="password" class="form-control" id="inputPassword4" placeholder="Password">
+                <label for="inputEmail4">Titre</label>
+                <input type="text" class="form-control" id="Titre" placeholder="Titre">
               </div>
             </div>
             <div class="form-group">
-              <label for="inputAddress">Address</label>
-              <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
-            </div>
-            <div class="form-group">
-              <label for="inputAddress2">Address 2</label>
-              <input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor">
+              <label for="inputAddress">Description</label>
+              <textarea type="text" class="form-control" id="inputAddress" placeholder="Description de la mission....."></textarea>
             </div>
             <div class="form-row">
               <div class="form-group col-md-6">
-                <label for="inputCity">City</label>
-                <input type="text" class="form-control" id="inputCity">
+                <label for="lieu">Lieu</label>
+                <input type="text" class="form-control" id="lieu" placeholder="lieu...">
               </div>
-              <div class="form-group col-md-4">
-                <label for="inputState">State</label>
+              <div class="form-group col-md-6">
+                <label for="inputState">Météo requise</label>
                 <select id="inputState" class="form-control">
-                  <option selected>Choose...</option>
-                  <option>...</option>
+                  <option selected>Tout temps</option>
+                  <option>Ensolleillé</option>
+                  <option>Pluie</option>
                 </select>
-              </div>
-              <div class="form-group col-md-2">
-                <label for="inputZip">Zip</label>
-                <input type="text" class="form-control" id="inputZip">
               </div>
             </div>
             <div class="form-group">
               <div class="form-check">
                 <input class="form-check-input" type="checkbox" id="gridCheck">
                 <label class="form-check-label" for="gridCheck">
-                  Check me out
+                  Y participer
                 </label>
               </div>
             </div>
@@ -188,16 +177,30 @@
 
 <footer class="text-muted">
   <div class="container">
-    <div id="log"></div>
-    <input id="msg" type="textbox" onkeypress="onkey(event)"/>
-    <button onclick="send()">Send</button>
-    <button onclick="quit()">Quit</button>
-    <div>Commands: hello, hi, name, age, date, time, thanks, bye</div>
-    <p class="float-right">
-      <a href="#">Retour en haut</a>
-    </p>
-    <p>Kévin Nguye | Baptiste Salvador | Ghislain Vidal</p>
+    <div class="row">
+      <div class="col-md-6 offset-md-3">
+        <div id="log"></div>
+          <input id="msg" type="textbox" onkeypress="onkey(event)"/>
+            <button onclick="send()">Send</button>
+            <button onclick="quit()">Quit</button>
+            <div>Commands: hello, hi, name, age, date, time, thanks, bye</div>
+            <p class="float-right">
+              <a href="#">Retour en haut</a>
+            </p>
+            <p>Kévin Nguyen | Baptiste Salvador | Ghislain Vidal</p>
+      </div>
+    </div>
+    <div class="row">
+    <br/>
+    <div class="col-md-12">
+    <div id="test1"></div>
+    <div id="test2"></div>
   </div>
+</div>
+</div>
+
+
+</script>
 </footer>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" integrity="sha384-xrRywqdh3PHs8keKZN+8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o" crossorigin="anonymous"></script>
@@ -207,15 +210,24 @@
 <script>
 var socket;
 
-function init(){
+var latitude,longitude;
 
+
+function init(){
   var host = "ws://127.0.0.1:1337";
   try{
+
+    getLocation();
     socket = new WebSocket(host);
     log('WebSocket - status '+socket.readyState);
     socket.onopen    = function(msg){ log("Welcome - status "+this.readyState); };
-    socket.onmessage = function(msg){ log("Received: "+msg.data); };
+    socket.onmessage = function(msg){
+
+      log("Received: "+msg.data);
+
+    };
     socket.onclose   = function(msg){ log("Disconnected - status "+this.readyState); };
+
   }
   catch(ex){ log(ex); }
   $("msg").focus();
@@ -235,14 +247,29 @@ function ajoutAction() {
   user = "test";
   Nom= user;
   try{socket.send("addAction"); log('Sent: ajout action au nom de '+ Nom);
-
   $("main").style.display = 'none';
   $("addAction").style.display = 'inherit';
+  $("longitude").value = longitude;
+  $("latitude").value = latitude;
   } catch(ex){ log(ex); }
+  findWeatherDetails();
 }
 function retourMain() {
   $("addAction").style.display = 'none';
   $("main").style.display = 'inherit';
+
+}
+function getLocation() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(showPosition);
+  } else {
+    x.innerHTML = "Geolocation is not supported by this browser.";
+  }
+}
+
+function showPosition(position) {
+latitude =  position.coords.latitude;
+longitude=  position.coords.longitude;
 }
 
 function quit(){
@@ -255,4 +282,37 @@ function quit(){
 function $(id){ return document.getElementById(id); }
 function log(msg){ $("log").innerHTML+="<br>"+msg; }
 function onkey(event){ if(event.keyCode==13){ send(); } }
+
+//Utilisation API METEO lien doc : https://openweathermap.org/forecast5
+
+let test1 = document.getElementById("test1");
+let test2 = document.getElementById("test2");
+let icon = document.getElementById("icon");
+
+const appKey = "5d2adabab648a8786abe5480fc06a5df";
+
+
+
+function findWeatherDetails() {
+  let searchLink = "https://api.openweathermap.org/data/2.5/forecast?lat="+latitude+"&lon="+longitude+"&appid="+appKey;
+   httpRequestAsync(searchLink, theResponse);
+ }
+
+function theResponse(response) {
+  let jsonObject = JSON.parse(response);
+  test1.innerHTML = parseInt(jsonObject.list[0].main.temp - 273) + "°";
+  test2.innerHTML = jsonObject.city.name ;
+}
+
+function httpRequestAsync(url, callback)
+{
+  console.log("hello");
+    var httpRequest = new XMLHttpRequest();
+    httpRequest.onreadystatechange = () => {
+        if (httpRequest.readyState == 4 && httpRequest.status == 200)
+            callback(httpRequest.responseText);
+    }
+    httpRequest.open("GET", url, true); // true for asynchronous
+    httpRequest.send();
+}
 </script>
