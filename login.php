@@ -1,7 +1,6 @@
 <?php
 session_start();
 ?>
-
 <html>
 <head>
   <meta charset="utf-8" />
@@ -15,7 +14,7 @@ session_start();
 </head>
 
 <body>
-  <?php if ($_SESSION['connecte'] == 'ErrMDP'){ ?>
+  <?php if (isset($_SESSION['id']) && $_SESSION['id'] == 'ErrMDP'){ ?>
     <div class='alert alert-danger' role='alert'>
     <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
     <strong>Erreur!</strong> Mauvais mot de passe
