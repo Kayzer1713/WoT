@@ -242,40 +242,21 @@ function init(){
     log('WebSocket - status '+socket.readyState);
     socket.onopen    = function(msg){ log("Welcome - status "+this.readyState); };
     socket.onmessage = function(event) {
-    var text = "";
-    var msg = JSON.parse(event.data);
-    //var time = new Date(msg.date);
-    //var timeStr = time.toLocaleTimeString();
+      var msg = JSON.parse(event.data);
+      //var time = new Date(msg.date);
+      //var timeStr = time.toLocaleTimeString();
 
-    switch(msg.type) {
-      case "id":
-        clientID = msg.id;
-        setUsername();
-        break;
-      case "username":
-        text = "<b>User <em>" + msg.name + "</em> signed in at " + timeStr + "</b><br>";
-        break;
-      case "message":
-        text = "(" + timeStr + ") <b>" + msg.name + "</b>: " + msg.text + "<br>";
-        break;
-      case "rejectusername":
-        text = "<b>Your username has been set to <em>" + msg.name + "</em> because the name you chose is in use.</b><br>"
-        break;
-      case "userlist":
-        var ul = "";
-        for (i=0; i < msg.users.length; i++) {
-          ul += msg.users[i] + "<br>";
+        if(msg['0'].Mail !== null)
+        {
+            //log('test: '+ msg['0'].Mail);
         }
-        document.getElementById("userlistbox").innerHTML = ul;
-        break;
-  }
 
-    };
+      }
     socket.onclose   = function(msg){ log("Disconnected - status "+this.readyState); };
 
   }
   catch(ex){ log(ex); }
-  $("msg").focus();
+  //$("msg").focus();
 
 }
 
