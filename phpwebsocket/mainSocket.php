@@ -9,14 +9,12 @@ require "websocket.class.php";
 // Extension de WebSocket
 class Wot extends WebSocket {
   function process($user,$msg) {
-
-
-    $this->say("< ".$msg);
+    $form= json_decode($msg);
+    $this->say($msg);
 
     $linkBd = connexionBdd();
-    switch($msg){
+    if($msg == "addAction"){
 
-      case "addAction" :
         $sql = "SELECT * FROM user";
         $result = mysqli_query($linkBd, $sql);
 
@@ -31,14 +29,19 @@ class Wot extends WebSocket {
         $this->send($user->socket, json_encode($dbdata));
         // Free result set
         mysqli_free_result($result);
-
-
-
-      break;
-      default:
-        //$this->send($user->socket,"Pas compris !");
-
-      break;
+    }
+    else if(($form->{'type'} ) == "add"){
+        $titre = ($form->{'titre'});
+        $date = ($form->{'date'});
+        $description = ($form->{'description'});
+        $lieu = ($form->{'lieu'});
+        $meteo = ($form->{'meteo'});
+        $sql = "INSERT INTO annonce (Titre, Description, Lieu, Meteo, Date) VALUES ($titre, $description, $lieu, $meteo, $date)";
+        //mysqli_query($linkBd, $sql) or die();
+        $this->send($user->socket, "ok");
+    }
+    else{
+        $this->send($user->socket,"Pas compris !");
     }
   }
 }

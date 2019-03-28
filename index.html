@@ -52,7 +52,7 @@
           </form>
         </div>
         <div class="col-md-2">
-          <button type="button" name="button"  class="btn btn-primary" onclick="ajoutAction()">Proposer Action </button>
+          <button type="button" name="button"  class="btn btn-primary" onclick='ajoutAction()'>Proposer Action </button>
         </diV>
       </div>
       <br/>
@@ -135,23 +135,27 @@
           <form>
             <div class="form-row">
               <div class="form-group col-md-6">
-                <label for="inputEmail4">Titre</label>
-                <input type="text" class="form-control" id="Titre" placeholder="Titre">
+                <label for="titre">Titre</label>
+                <input type="text" class="form-control" id="titre" placeholder="Titre" required>
+              </div>
+              <div class="form-group col-md-6">
+                <label for="date">Date</label>
+                <input type="date" class="form-control" id="date" placeholder="dd/mm/yyyy" required>
               </div>
             </div>
             <div class="form-group">
               <label for="inputAddress">Description</label>
-              <textarea type="text" class="form-control" id="inputAddress" placeholder="Description de la mission....."></textarea>
+              <textarea type="text" class="form-control" id="description" placeholder="Description de la mission....." required></textarea>
             </div>
             <div class="form-row">
               <div class="form-group col-md-6">
                 <label for="lieu">Lieu</label>
-                <input type="text" class="form-control" id="lieu">
+                <input type="text" class="form-control" id="lieu" required>
               </div>
               <!--pour les values https://openweathermap.org/weather-conditions-->
               <div class="form-group col-md-6">
                 <label for="inputState">Météo requise</label>
-                <select id="inputState" class="form-control">
+                <select id="meteo" class="form-control">
                   <option selected>Tout les temps</option>
                   <option value="800">Temps clair</option>
                   <option value="801">Temps clair ou nuageux</option>
@@ -169,7 +173,7 @@
               </div>
             </div>
             <button onclick="retourMain()" class="btn btn-secondary">retour</button>
-            <button type="submit" class="btn btn-primary">Sign in</button>
+            <button type="button" class="btn btn-primary" onclick="test()">Publier</button>
           </form>
         </div>
       </div>
@@ -263,6 +267,19 @@ function ajoutAction() {
   $("addAction").style.display = 'inherit';
   } catch(ex){ log(ex); }
   $("lieu").setAttribute("placeholder",city);
+}
+function test(){
+  if($("date").value != '' && $("titre").value != '' && $("description").value  != '' && $("lieu").value  != '' && $("meteo").value  != ''){
+  var test1 = {
+    type: "add",
+    titre: $("titre").value,
+    date: $("date").value,
+    description: $("description").value,
+    lieu: $("lieu").value,
+    meteo: $("meteo").value
+  };
+  try{socket.send(JSON.stringify(test1)); }catch(ex){ log(ex); }
+}
 }
 function retourMain() {
   $("addAction").style.display = 'none';
