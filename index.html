@@ -146,14 +146,17 @@
             <div class="form-row">
               <div class="form-group col-md-6">
                 <label for="lieu">Lieu</label>
-                <input type="text" class="form-control" id="lieu" placeholder="lieu...">
+                <input type="text" class="form-control" id="lieu">
               </div>
+              <!--pour les values https://openweathermap.org/weather-conditions-->
               <div class="form-group col-md-6">
                 <label for="inputState">Météo requise</label>
                 <select id="inputState" class="form-control">
-                  <option selected>Tout temps</option>
-                  <option>Ensolleillé</option>
-                  <option>Pluie</option>
+                  <option selected>Tout les temps</option>
+                  <option value="800">Temps clair</option>
+                  <option value="801">Temps clair ou nuageux</option>
+                  <option value="500">Pluie</option>
+                  <option value="600">Neige</option>
                 </select>
               </div>
             </div>
@@ -180,10 +183,6 @@
     <div class="row">
       <div class="col-md-6 offset-md-3">
         <div id="log"></div>
-          <input id="msg" type="textbox" onkeypress="onkey(event)"/>
-            <button onclick="send()">Send</button>
-            <button onclick="quit()">Quit</button>
-            <div>Commands: hello, hi, name, age, date, time, thanks, bye</div>
             <p class="float-right">
               <a href="#">Retour en haut</a>
             </p>
@@ -193,6 +192,12 @@
     <div class="row">
     <br/>
     <div class="col-md-12">
+      <div class="city-icon">
+      <div class="city-icon-holder">
+      <div id="city-name"></div>
+      <img src="" alt="" id="icon">
+        </div>
+    </div>
     <div id="test1"></div>
     <div id="test2"></div>
   </div>
@@ -210,7 +215,7 @@
 <script>
 var socket;
 
-var latitude,longitude;
+let latitude,longitude,city;
 
 
 function init(){
@@ -221,9 +226,34 @@ function init(){
     socket = new WebSocket(host);
     log('WebSocket - status '+socket.readyState);
     socket.onopen    = function(msg){ log("Welcome - status "+this.readyState); };
-    socket.onmessage = function(msg){
+    socket.onmessage = function(event) {
+    var text = "";
+    var msg = JSON.parse(event.data);
+    //var time = new Date(msg.date);
+    //var timeStr = time.toLocaleTimeString();
 
-      log("Received: "+msg.data);
+    switch(msg.type) {
+      case "id":
+        clientID = msg.id;
+        setUsername();
+        break;
+      case "username":
+        text = "<b>User <em>" + msg.name + "</em> signed in at " + timeStr + "</b><br>";
+        break;
+      case "message":
+        text = "(" + timeStr + ") <b>" + msg.name + "</b>: " + msg.text + "<br>";
+        break;
+      case "rejectusername":
+        text = "<b>Your username has been set to <em>" + msg.name + "</em> because the name you chose is in use.</b><br>"
+        break;
+      case "userlist":
+        var ul = "";
+        for (i=0; i < msg.users.length; i++) {
+          ul += msg.users[i] + "<br>";
+        }
+        document.getElementById("userlistbox").innerHTML = ul;
+        break;
+  }
 
     };
     socket.onclose   = function(msg){ log("Disconnected - status "+this.readyState); };
@@ -231,6 +261,7 @@ function init(){
   }
   catch(ex){ log(ex); }
   $("msg").focus();
+
 }
 
 function send(){
@@ -249,10 +280,8 @@ function ajoutAction() {
   try{socket.send("addAction"); log('Sent: ajout action au nom de '+ Nom);
   $("main").style.display = 'none';
   $("addAction").style.display = 'inherit';
-  $("longitude").value = longitude;
-  $("latitude").value = latitude;
   } catch(ex){ log(ex); }
-  findWeatherDetails();
+  $("lieu").setAttribute("placeholder",city);
 }
 function retourMain() {
   $("addAction").style.display = 'none';
@@ -268,8 +297,9 @@ function getLocation() {
 }
 
 function showPosition(position) {
-latitude =  position.coords.latitude;
-longitude=  position.coords.longitude;
+  latitude = position.coords.latitude;
+  longitude=  position.coords.longitude;
+  findWeatherDetails();
 }
 
 function quit(){
@@ -301,7 +331,10 @@ function findWeatherDetails() {
 function theResponse(response) {
   let jsonObject = JSON.parse(response);
   test1.innerHTML = parseInt(jsonObject.list[0].main.temp - 273) + "°";
-  test2.innerHTML = jsonObject.city.name ;
+  city = jsonObject.city.name ;
+  test2.innerHTML = city;
+  icon.src = "http://openweathermap.org/img/w/" + jsonObject.list[0].weather[0].icon + ".png";
+
 }
 
 function httpRequestAsync(url, callback)

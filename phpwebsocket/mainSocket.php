@@ -9,28 +9,49 @@ require "websocket.class.php";
 // Extension de WebSocket
 class Wot extends WebSocket {
   function process($user,$msg) {
+
+
     $this->say("< ".$msg);
+
+    $linkBd = connexionBdd();
     switch($msg){
-      case "hello":
-        $this->send($user->socket,"Bonjour");
-      break;
-      case "date":
-        $this->send($user->socket,"Nous sommes le ".date("d/m/Y"));
-      break;
-      case "bye":
-      case "ciao":
-        $this->send($user->socket,"Au revoir");
-        $this->disconnect($user->socket);
+
       case "addAction" :
-        $this->send($user->socket,"info bdd sur user");
+        $sql = "SELECT * FROM user";
+        $result = mysqli_query($linkBd, $sql);
+
+        /*while($donnees = mysqli_fetch_assoc($result))
+        {
+          $this->send($user->socket, $donnees['Prenom']);
+        }*/
+        while ( $row = $result->fetch_assoc())  {
+      	$dbdata[]=$row;
+        }
+      //  json_encode($dbdata);
+        $this->send($user->socket, json_encode($dbdata));
+        // Free result set
+        mysqli_free_result($result);
+
+
+
       break;
       default:
-        $this->send($user->socket,"Pas compris !");
+        //$this->send($user->socket,"Pas compris !");
+
       break;
     }
   }
 }
 
 $master = new Wot("localhost",1337);
+
+function connexionBdd(){
+  $link = new mysqli ("localhost", "root", "","wot_bd")
+  or die();
+  return $link;
+}
+function closeBd($link){
+  mysql_close($link);
+}
 
 ?>
