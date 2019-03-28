@@ -1,13 +1,22 @@
+<?php
+session_start();
+echo $_SESSION['connecte'];
+if (isset($_SESSION['connecte']) && !empty($_SESSION['connecte']){
+  header('location:fonctions/login.html');
+}
+?>
 
 <!doctype html>
-<html lang="en">
+<html lang="fr">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
 
     <title>WOT</title>
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="JS/popup.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="./css/style.css">
   </head>
@@ -27,6 +36,12 @@
       </div>
     </div>
   </div>
+  <?php if ($_SESSION['connecte'] == 'OK'): ?>
+    <div class='alert alert-success' role='alert'>
+    <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
+    <strong>Succès!</strong> Vous êtes bien connecté!
+    </div>
+  <?php endif; ?>
   <div class="navbar navbar-dark bg-dark shadow-sm">
     <div class="container d-flex justify-content-between">
       <a href="#" class="navbar-brand d-flex align-items-center">
@@ -38,7 +53,7 @@
     </div>
   </div>
 </header>
-
+<button><a href="fonctions/deconnexion.php">Déconnexion</a></button>
 <main role="main">
 
 
@@ -346,4 +361,5 @@ function httpRequestAsync(url, callback)
     httpRequest.open("GET", url, true); // true for asynchronous
     httpRequest.send();
 }
+
 </script>
