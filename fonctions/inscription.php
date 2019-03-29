@@ -19,7 +19,7 @@ $sql = "INSERT INTO user (mail, nom, prenom, mdp)
 values ('$username','$nom','$prenom','$password')";
 if ($conn->query($sql)){
   $_SESSION['connecte'] = 'OK';
-  header ('location: ../index.html');
+  header ('location: ../index.php');
 }
 else{
   $_SESSION['conecte'] = 'NO';
