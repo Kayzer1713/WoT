@@ -1,7 +1,7 @@
 <?php
 session_start();
-if (isset($_SESSION['connecte']) && !empty($_SESSION['connecte'])) {
-  header('location:fonctions/connexion.php');
+if (!isset($_SESSION['id']) && empty($_SESSION['id'])) {
+  header('location:login.php');
 }
 ?>
 
@@ -9,55 +9,40 @@ if (isset($_SESSION['connecte']) && !empty($_SESSION['connecte'])) {
 <html lang="fr">
   <head>
     <script type="text/javascript" src="JS/jquery-3.3.1.js"></script>
-
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
 
-
-    <link rel="stylesheet" type="text/css" href="JS/DataTables-1.10.18/css/jquery.dataTables.min.css"/>
-
-    <script type="text/javascript" src="JS/DataTables-1.10.18/js/jquery.dataTables.min.js"></script>
-    <script src="JS/popup.js"></script>
     <title>WOT</title>
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="JS/popup.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" type="text/css" href="JS/DataTables-1.10.18/css/jquery.dataTables.min.css"/>
+    <script type="text/javascript" src="JS/DataTables-1.10.18/js/jquery.dataTables.min.js"></script>
   </head>
   <body onload="init()">
     <header>
   <div class="collapse bg-dark" id="navbarHeader">
-    <div class="container">
-      <div class="row">
-        <div class="col-sm-8 col-md-7 py-4">
-          <h4 class="text-white">About</h4>
-          <p class="text-muted">Blab bla bla bla bla</p>
-        </div>
-        <div class="col-sm-4 offset-md-1 py-4">
-          <h4 class="text-white">Contact</h4>
-
-        </div>
-      </div>
-    </div>
   </div>
-  <?php if ($_SESSION['connecte'] == 'OK'): ?>
+  <?php if (isset($_SESSION['id'])){ ?>
     <div class='alert alert-success' role='alert'>
     <button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
     <strong>Succès!</strong> Vous êtes bien connecté!
     </div>
-  <?php endif; ?>
+  <?php } ?>
   <div class="navbar navbar-dark bg-dark shadow-sm">
     <div class="container d-flex justify-content-between">
       <a href="#" class="navbar-brand d-flex align-items-center">
           <strong>WOT · Aide notre planète</strong>
       </a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
+      <button type="button">
+        <a href="fonctions/deconnexion.php">Déconnexion</a>
       </button>
     </div>
   </div>
 </header>
-<button><a href="fonctions/deconnexion.php">Déconnexion</a></button>
 <main role="main">
 
 
