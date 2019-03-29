@@ -15,20 +15,8 @@ class Wot extends WebSocket {
     $linkBd = connexionBdd();
     if($msg == "addAction"){
 
-        $sql = "SELECT * FROM user";
-        $result = mysqli_query($linkBd, $sql);
 
-        /*while($donnees = mysqli_fetch_assoc($result))
-        {
-          $this->send($user->socket, $donnees['Prenom']);
-        }*/
-        while ( $row = $result->fetch_assoc())  {
-      	$dbdata[]=$row;
-        }
-      //  json_encode($dbdata);
-        $this->send($user->socket, json_encode($dbdata));
-        // Free result set
-        mysqli_free_result($result);
+        
     }
     else if(($form->{'type'} ) == "add"){
         $titre = ($form->{'titre'});

@@ -1,8 +1,7 @@
 <?php
 session_start();
-echo $_SESSION['connecte'];
-if (isset($_SESSION['connecte']) && !empty($_SESSION['connecte']){
-  header('location:fonctions/login.html');
+if (isset($_SESSION['connecte']) && !empty($_SESSION['connecte'])) {
+  header('location:fonctions/connexion.php');
 }
 ?>
 
@@ -79,11 +78,14 @@ if (isset($_SESSION['connecte']) && !empty($_SESSION['connecte']){
       <br/>
       <br/>
 
-      <div class="row" id="contentAdd">
+
+ <div class="container" id="contentAdd">
 
 
 
-
+</div>
+</div>
+</div>
   <div class="album py-5 bg-light" id="addAction">
     <div class="container">
       <div class="row">
@@ -142,7 +144,7 @@ if (isset($_SESSION['connecte']) && !empty($_SESSION['connecte']){
   <div class="container">
     <div class="row">
       <div class="col-md-6 offset-md-3">
-        <div id="log"></div>
+        <div id="log" style="display: none!important;"></div>
             <p class="float-right">
               <a href="#">Retour en haut</a>
             </p>
@@ -206,10 +208,10 @@ function init(){
         }
       }
       else if (msgJson){
-        if(msgJson['0'].Titre)
+        if(msgJson['0'].Titre != 'null')
         {
 
-        populateHeader(msgJson);
+          populateHeader(msgJson);
           //showHeroes(msgJson);
           log('test: '+ msgJson['0'].Titre);
         }
@@ -227,37 +229,22 @@ function init(){
 
 }
 
-function populateHeader(jsonObj) {
+async function populateHeader(jsonObj) {
   var y =0;
   for (var i = 0; i < jsonObj.length; i++) {
 
-      let searchLink = "https://api.openweathermap.org/data/2.5/weather?q="+jsonObj[i].Lieu+"&appid="+appKey;
 
+      // checkWeather("Balma");
 
-        var response;
-        var httpRequest = new XMLHttpRequest();
-        httpRequest.open("GET", searchLink,true); // true for asynchronous
-        httpRequest.send();
-
-        httpRequest.onreadystatechange = () => {
-
-          if (httpRequest.readyState == 4 && httpRequest.status == 200){
-            i=y;
-
-                 response = (httpRequest.responseText);
-                 let jsonObject = JSON.parse(response);
-                 metAct = jsonObject.weather['0'].description ;
-                 var test = metAct;
-
-                 if(y % 2 == 0){
+                 if(i % 2 == 0){
                          var row = document.createElement("div");
                          row.setAttribute('class', 'row');
                          header.appendChild(row);
                          var col = document.createElement("div");
-                         col.setAttribute('class', 'col-md-12');
+                         col.setAttribute('class', 'col-md-5');
                          row.appendChild(col);
                          var colS = document.createElement("div");
-                         colS.setAttribute('class', 'card mb-4 shadow-sm art');
+                         colS.setAttribute('class', 'card mb-5 shadow-sm art');
                          col.appendChild(colS);
 
                          var myH1 = document.createElement('h1');
@@ -265,14 +252,14 @@ function populateHeader(jsonObj) {
                          var Date = document.createElement('p');
                          var Lieu = document.createElement('p');
                          var Meteo = document.createElement('p');
-                         var MeteoP = document.createElement('p');
+                         //var MeteoP = document.createElement('p');
                          var Button = document.createElement("BUTTON");
                          myH1.textContent = jsonObj[i].Titre;
                          Description.textContent = jsonObj[i].Description;
                          Date.textContent = "Date : "+jsonObj[i].Date;
                          Lieu.textContent = "Lieu : "+jsonObj[i].Lieu;
                          Meteo.textContent = "Meteo requise: "+jsonObj[i].Meteo;
-                         MeteoP.textContent = "Meteo actuelle: "+metAct;
+                         //MeteoP.textContent = "Meteo actuelle: "+metAct;
                          Button.innerHTML  = "Rejoindre";
                          Button.setAttribute('class', 'btn btn-light');
                          colS.appendChild(myH1);
@@ -280,17 +267,17 @@ function populateHeader(jsonObj) {
                          colS.appendChild(Date);
                          colS.appendChild(Lieu);
                          colS.appendChild(Meteo);
-                         colS.appendChild(MeteoP);
+                        // colS.appendChild(MeteoP);
                          colS.appendChild(Button);
 
                  }
                  else{
 
                   var col = document.createElement("div");
-                  col.setAttribute('class', 'col-md-12');
-                  header.appendChild(col);
+                  col.setAttribute('class', 'col-md-5');
+                  row.appendChild(col);
                   var colS = document.createElement("div");
-                  colS.setAttribute('class', 'card mb-4 shadow-sm art');
+                  colS.setAttribute('class', 'card mb-5 shadow-sm art');
                   col.appendChild(colS);
 
                   var myH1 = document.createElement('h1');
@@ -298,7 +285,7 @@ function populateHeader(jsonObj) {
                   var Date = document.createElement('p');
                   var Lieu = document.createElement('p');
                   var Meteo = document.createElement('p');
-                  var MeteoP = document.createElement('p');
+                  //var MeteoP = document.createElement('p');
                   var Button = document.createElement("BUTTON");
                   var toto = jsonObj[i].Titre;
                   myH1.textContent = jsonObj[i].Titre;
@@ -306,7 +293,7 @@ function populateHeader(jsonObj) {
                   Date.textContent = "Date : "+jsonObj[i].Date;
                   Lieu.textContent = "Lieu : "+jsonObj[i].Lieu;
                   Meteo.textContent = "Meteo requise: "+jsonObj[i].Meteo;
-                  MeteoP.textContent = "Meteo actuelle: "+metAct;
+                  //MeteoP.textContent = "Meteo actuelle: "+metAct;
                   Button.innerHTML  = "Rejoindre";
                   Button.setAttribute('class', 'btn btn-light');
                   colS.appendChild(myH1);
@@ -314,17 +301,16 @@ function populateHeader(jsonObj) {
                   colS.appendChild(Date);
                   colS.appendChild(Lieu);
                   colS.appendChild(Meteo);
-                  colS.appendChild(MeteoP);
+                  //colS.appendChild(MeteoP);
                   colS.appendChild(Button);
                 }
-                i++;
-                y++;
-          }
+
+        //  }
 
         }
 
 
-      }
+      //}
 
 
 
@@ -426,6 +412,7 @@ function checkWeather(ville){
 function theResponseCheck(response) {
   let jsonObject = JSON.parse(response);
   metAct = jsonObject.weather['0'].description ;
+  return "ok";
 }
 
 function findWeatherDetails() {
@@ -451,9 +438,11 @@ function httpRequestAsync(url, callback)
     httpRequest.onreadystatechange = () => {
         if (httpRequest.readyState == 4 && httpRequest.status == 200)
             callback(httpRequest.responseText);
+            return "ok";
     }
     httpRequest.open("GET", url, true); // true for asynchronous
     httpRequest.send();
+
 }
 
 </script>
