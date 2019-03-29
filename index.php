@@ -9,14 +9,19 @@ if (isset($_SESSION['connecte']) && !empty($_SESSION['connecte']){
 <!doctype html>
 <html lang="fr">
   <head>
+    <script type="text/javascript" src="JS/jquery-3.3.1.js"></script>
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
 
+
+    <link rel="stylesheet" type="text/css" href="JS/DataTables-1.10.18/css/jquery.dataTables.min.css"/>
+
+    <script type="text/javascript" src="JS/DataTables-1.10.18/js/jquery.dataTables.min.js"></script>
+    <script src="JS/popup.js"></script>
     <title>WOT</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="JS/popup.js"></script>
+
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="./css/style.css">
   </head>
@@ -73,76 +78,12 @@ if (isset($_SESSION['connecte']) && !empty($_SESSION['connecte']){
       <br/>
       <br/>
       <br/>
-      <div class="row">
-        <div class="col-md-4 ">
-          <div class="card mb-4 shadow-sm art">
-            <h1>
-              Plage Gruisan
-            </h1
-            <p>
-              Bla bla bla bla bla bla bla bla
-            </p>
-            <br/>
-            <p> Lieu : </p>
-            <br/>
-            <p> Météo requise : Soleil </p>
-            <br/>
-            <p>
-              Météo Prévisinnelle
-            </p>
-            <br/>
-            <p> Auteur : Baptiste Salvador </p>
-            <button type="button" name="button" class="btn btn-light">Rejoindre</button>
-            </div>
-          </div>
 
-        <div class="col-md-4">
-          <div class="card mb-4 shadow-sm art">
-            <h1>
-              Plage Mortbillan
-            </h1
-            <p>
-              Bla bla bla bla bla bla bla bla
-            </p>
-            <br/>
-            <p> Lieu : </p>
-            <br/>
-            <p> Météo requise : Peut-importe </p>
-            <br/>
-            <p>
-              Météo Prévisinnelle
-            </p>
-            <br/>
-            <p> Auteur : Baptiste Salvador </p>
-            <button type="button" name="button" class="btn btn-light">Rejoindre</button>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="card mb-4 shadow-sm art">
-            <h1>
-              Cathédrale Albi
-            </h1
-            <p>
-              Bla bla bla bla bla bla bla bla
-            </p>
-            <br/>
-            <p> Lieu : </p>
-            <br/>
-            <p> Météo requise : Peut-importe </p>
-            <br/>
-            <p>
-              Météo Prévisinnelle
-            </p>
-            <br/>
-            <p> Auteur : Baptiste Salvador </p>
-            <button type="button" name="button" class="btn btn-light">Rejoindre</button>
-          </div>
-        </div>
+      <div class="row" id="contentAdd">
 
 
-      </div>
-    </div>
-  </div>
+
+
   <div class="album py-5 bg-light" id="addAction">
     <div class="container">
       <div class="row">
@@ -172,10 +113,10 @@ if (isset($_SESSION['connecte']) && !empty($_SESSION['connecte']){
                 <label for="inputState">Météo requise</label>
                 <select id="meteo" class="form-control">
                   <option selected>Tout les temps</option>
-                  <option value="800">Temps clair</option>
-                  <option value="801">Temps clair ou nuageux</option>
-                  <option value="500">Pluie</option>
-                  <option value="600">Neige</option>
+                  <option >Temps clair</option>
+                  <option >Temps clair ou nuageux</option>
+                  <option >Pluie</option>
+                  <option >Neige</option>
                 </select>
               </div>
             </div>
@@ -188,7 +129,7 @@ if (isset($_SESSION['connecte']) && !empty($_SESSION['connecte']){
               </div>
             </div>
             <button onclick="retourMain()" class="btn btn-secondary">retour</button>
-            <button type="button" class="btn btn-primary" onclick="test()">Publier</button>
+            <button type="button" class="btn btn-primary" onclick="AddAnnonce()">Publier</button>
           </form>
         </div>
       </div>
@@ -226,18 +167,19 @@ if (isset($_SESSION['connecte']) && !empty($_SESSION['connecte']){
 
 </script>
 </footer>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" integrity="sha384-xrRywqdh3PHs8keKZN+8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o" crossorigin="anonymous"></script>
 </body>
 </html>
 
 <script>
+
 var socket;
-
+const appKey = "5d2adabab648a8786abe5480fc06a5df";
 let latitude,longitude,city;
-
+let metAct;
+var header = document.querySelector("#contentAdd");
 
 function init(){
+
   var host = "ws://127.0.0.1:1337";
   try{
 
@@ -246,17 +188,38 @@ function init(){
     log('WebSocket - status '+socket.readyState);
     socket.onopen    = function(msg){ log("Welcome - status "+this.readyState); };
     socket.onmessage = function(event) {
-      var msg = JSON.parse(event.data);
+      try{
+            var msgJson = JSON.parse(event.data);
+         } catch (e) {
+            var msg = event.data;
+          }
+
       //var time = new Date(msg.date);
       //var timeStr = time.toLocaleTimeString();
-
-        if(msg['0'].Mail !== null)
-        {
-            //log('test: '+ msg['0'].Mail);
+      if(msg){
+        switch (msg) {
+          case "addOK":
+          location.reload();
+            break;
+          default:
+          log("pas compris");
         }
+      }
+      else if (msgJson){
+        if(msgJson['0'].Titre)
+        {
+
+        populateHeader(msgJson);
+          //showHeroes(msgJson);
+          log('test: '+ msgJson['0'].Titre);
+        }
+      }
+
 
       }
     socket.onclose   = function(msg){ log("Disconnected - status "+this.readyState); };
+
+    getAnnonces();
 
   }
   catch(ex){ log(ex); }
@@ -264,6 +227,126 @@ function init(){
 
 }
 
+function populateHeader(jsonObj) {
+  var y =0;
+  for (var i = 0; i < jsonObj.length; i++) {
+
+      let searchLink = "https://api.openweathermap.org/data/2.5/weather?q="+jsonObj[i].Lieu+"&appid="+appKey;
+
+
+        var response;
+        var httpRequest = new XMLHttpRequest();
+        httpRequest.open("GET", searchLink,true); // true for asynchronous
+        httpRequest.send();
+
+        httpRequest.onreadystatechange = () => {
+
+          if (httpRequest.readyState == 4 && httpRequest.status == 200){
+            i=y;
+
+                 response = (httpRequest.responseText);
+                 let jsonObject = JSON.parse(response);
+                 metAct = jsonObject.weather['0'].description ;
+                 var test = metAct;
+
+                 if(y % 2 == 0){
+                         var row = document.createElement("div");
+                         row.setAttribute('class', 'row');
+                         header.appendChild(row);
+                         var col = document.createElement("div");
+                         col.setAttribute('class', 'col-md-12');
+                         row.appendChild(col);
+                         var colS = document.createElement("div");
+                         colS.setAttribute('class', 'card mb-4 shadow-sm art');
+                         col.appendChild(colS);
+
+                         var myH1 = document.createElement('h1');
+                         var Description = document.createElement('p');
+                         var Date = document.createElement('p');
+                         var Lieu = document.createElement('p');
+                         var Meteo = document.createElement('p');
+                         var MeteoP = document.createElement('p');
+                         var Button = document.createElement("BUTTON");
+                         myH1.textContent = jsonObj[i].Titre;
+                         Description.textContent = jsonObj[i].Description;
+                         Date.textContent = "Date : "+jsonObj[i].Date;
+                         Lieu.textContent = "Lieu : "+jsonObj[i].Lieu;
+                         Meteo.textContent = "Meteo requise: "+jsonObj[i].Meteo;
+                         MeteoP.textContent = "Meteo actuelle: "+metAct;
+                         Button.innerHTML  = "Rejoindre";
+                         Button.setAttribute('class', 'btn btn-light');
+                         colS.appendChild(myH1);
+                         colS.appendChild(Description);
+                         colS.appendChild(Date);
+                         colS.appendChild(Lieu);
+                         colS.appendChild(Meteo);
+                         colS.appendChild(MeteoP);
+                         colS.appendChild(Button);
+
+                 }
+                 else{
+
+                  var col = document.createElement("div");
+                  col.setAttribute('class', 'col-md-12');
+                  header.appendChild(col);
+                  var colS = document.createElement("div");
+                  colS.setAttribute('class', 'card mb-4 shadow-sm art');
+                  col.appendChild(colS);
+
+                  var myH1 = document.createElement('h1');
+                  var Description = document.createElement('p');
+                  var Date = document.createElement('p');
+                  var Lieu = document.createElement('p');
+                  var Meteo = document.createElement('p');
+                  var MeteoP = document.createElement('p');
+                  var Button = document.createElement("BUTTON");
+                  var toto = jsonObj[i].Titre;
+                  myH1.textContent = jsonObj[i].Titre;
+                  Description.textContent = jsonObj[i].Description;
+                  Date.textContent = "Date : "+jsonObj[i].Date;
+                  Lieu.textContent = "Lieu : "+jsonObj[i].Lieu;
+                  Meteo.textContent = "Meteo requise: "+jsonObj[i].Meteo;
+                  MeteoP.textContent = "Meteo actuelle: "+metAct;
+                  Button.innerHTML  = "Rejoindre";
+                  Button.setAttribute('class', 'btn btn-light');
+                  colS.appendChild(myH1);
+                  colS.appendChild(Description);
+                  colS.appendChild(Date);
+                  colS.appendChild(Lieu);
+                  colS.appendChild(Meteo);
+                  colS.appendChild(MeteoP);
+                  colS.appendChild(Button);
+                }
+                i++;
+                y++;
+          }
+
+        }
+
+
+      }
+
+
+
+
+
+
+
+}
+
+function getAnnonces(){
+  /*  if($("lieuSearch").value == '' || $("lieuSearch").value == 'null' ){*/var lieuS = city;/*}else{ lieuS = $("lieuSearch").value }*/
+
+  var critere = {
+    type: "getAnnonces",
+    /*titre: $("titreSearch").value,
+    date: $("date").value,
+    description: $("description").value,*/
+    lieu: lieuS
+    //meteo: $("meteo").value
+  };
+  try{socket.send(JSON.stringify(critere)); }catch(ex){ log(ex); }
+}
 function send(){
   var txt,msg;
   txt = $("msg");
@@ -283,9 +366,9 @@ function ajoutAction() {
   } catch(ex){ log(ex); }
   $("lieu").setAttribute("placeholder",city);
 }
-function test(){
+function AddAnnonce(){
   if($("date").value != '' && $("titre").value != '' && $("description").value  != '' && $("lieu").value  != '' && $("meteo").value  != ''){
-  var test1 = {
+  var annonce = {
     type: "add",
     titre: $("titre").value,
     date: $("date").value,
@@ -293,7 +376,7 @@ function test(){
     lieu: $("lieu").value,
     meteo: $("meteo").value
   };
-  try{socket.send(JSON.stringify(test1)); }catch(ex){ log(ex); }
+  try{socket.send(JSON.stringify(annonce)); }catch(ex){ log(ex); }
 }
 }
 function retourMain() {
@@ -313,6 +396,7 @@ function showPosition(position) {
   latitude = position.coords.latitude;
   longitude=  position.coords.longitude;
   findWeatherDetails();
+
 }
 
 function quit(){
@@ -332,14 +416,24 @@ let test1 = document.getElementById("test1");
 let test2 = document.getElementById("test2");
 let icon = document.getElementById("icon");
 
-const appKey = "5d2adabab648a8786abe5480fc06a5df";
 
 
+function checkWeather(ville){
+  let searchLink = "https://api.openweathermap.org/data/2.5/weather?q="+ville+"&appid="+appKey;
+   httpRequestAsync(searchLink, theResponseCheck);
+
+}
+function theResponseCheck(response) {
+  let jsonObject = JSON.parse(response);
+  metAct = jsonObject.weather['0'].description ;
+}
 
 function findWeatherDetails() {
   let searchLink = "https://api.openweathermap.org/data/2.5/forecast?lat="+latitude+"&lon="+longitude+"&appid="+appKey;
    httpRequestAsync(searchLink, theResponse);
+
  }
+
 
 function theResponse(response) {
   let jsonObject = JSON.parse(response);
@@ -347,12 +441,12 @@ function theResponse(response) {
   city = jsonObject.city.name ;
   test2.innerHTML = city;
   icon.src = "http://openweathermap.org/img/w/" + jsonObject.list[0].weather[0].icon + ".png";
+ getAnnonces();
 
 }
 
 function httpRequestAsync(url, callback)
 {
-  console.log("hello");
     var httpRequest = new XMLHttpRequest();
     httpRequest.onreadystatechange = () => {
         if (httpRequest.readyState == 4 && httpRequest.status == 200)
